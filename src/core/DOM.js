@@ -18,8 +18,12 @@ class DOM {
     return this
   }
 
-  on() {
-    console.log('On smthg')
+  on(eventType, callback) {
+    this.$element.addEventListener(eventType, callback)
+  }
+
+  off(eventType, callback) {
+    this.$element.removeEventListener(eventType, callback)
   }
 
   append(node) {
