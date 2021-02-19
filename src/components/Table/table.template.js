@@ -10,9 +10,14 @@ const CODES = {
   Функция создания строчек
 */
 function createRow(idx, content) {
+  const resize = idx ? '<div class="row-resize" data-resize="row"></div>': ''
+  const indexContent = idx ? idx : ''
   return `
-    <div class="row">
-      <div class="row-info">${idx ? idx : ''}</div>
+    <div class="row" data-type="resizable">
+      <div class="row-info">
+        ${indexContent}
+        ${resize}
+      </div>
       <div class="row-data">${content}</div>
     </div>
   `
@@ -21,10 +26,11 @@ function createRow(idx, content) {
 /*
   Функция создания колонок
 */
-function toColumn(col) {
+function toColumn(col, idx) {
   return `
-    <div class="column">
+    <div class="column" data-type="resizable" data-col="${idx}">
       ${col}
+      <div class="col-resize" data-resize="col"></div>
     </div>
   `
 }
@@ -32,9 +38,9 @@ function toColumn(col) {
 /*
   Функция создания ячеек
 */
-function toCell() {
+function toCell(_, idx) {
   return `
-    <div class="cell" contenteditable></div>
+    <div class="cell" data-col="${idx}" contenteditable></div>
   `
 }
 
@@ -51,7 +57,7 @@ export function createTable(rowsCount = 15) {
   const cols = new Array(colsCount)
       .fill('')
       .map((_, idx) => toChar(_, idx))
-      .map(element => toColumn(element))
+      .map((element, idx) => toColumn(element, idx))
       .join('')
 
   rows.push(createRow(null, cols))
@@ -61,6 +67,7 @@ export function createTable(rowsCount = 15) {
         .fill('')
         .map((_, idx) => toCell(_, idx))
         .join('')
+
     rows.push(createRow(idx + 1, cells))
   }
 
