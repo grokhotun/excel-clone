@@ -10,10 +10,10 @@ export class TableSelection {
     класса DOM
   */
   select($element) {
-    this.current = $element
     this.clear()
+    $element.focus().addClass(TableSelection.className)
     this.group.push($element)
-    $element.addClass(TableSelection.className)
+    this.current = $element
   }
 
   selectGroup($group) {

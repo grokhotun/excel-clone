@@ -84,6 +84,11 @@ class DOM {
     }
     return this.data.id
   }
+
+  focus() {
+    this.$element.focus()
+    return this
+  }
 }
 
 export function $(selector) {

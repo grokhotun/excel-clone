@@ -1,5 +1,5 @@
 import {$} from '@/core/DOM'
-import {range} from '@/core/utils'
+import {range, nextSelector} from '@/core/utils'
 import {ExcelComponent} from '@core/ExcelComponent'
 import {createTable} from '@/components/Table/table.template'
 import {resizeHandler} from '@/components/Table/table.resize'
@@ -11,7 +11,7 @@ export class Table extends ExcelComponent {
 
   constructor($root) {
     super($root, {
-      listeners: ['mousedown']
+      listeners: ['mousedown', 'keydown']
     })
   }
 
@@ -48,6 +48,29 @@ export class Table extends ExcelComponent {
       } else {
         this.selection.select($target)
       }
+    }
+  }
+
+  onKeydown(event) {
+    const keys = [
+      'Enter',
+      'Tab',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown'
+    ]
+    const {key} = event
+    /*
+      Если нажата одна из клавиш и не нажат шифт
+      отменяет действие по умолчанию, получаем
+      нужную ячейку, кидаем на нее фокус и выделяем цветом
+    */
+    if (keys.includes(key) && !event.shiftKey) {
+      event.preventDefault()
+      const id = this.selection.current.id(true)
+      const $next = this.$root.find(nextSelector(key, id))
+      this.selection.select($next)
     }
   }
 }
