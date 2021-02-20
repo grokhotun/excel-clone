@@ -54,12 +54,35 @@ class DOM {
     return this.$element.querySelectorAll(selector)
   }
 
+  find(selector) {
+    return $(this.$element.querySelector(selector))
+  }
+
   css(styles = {}) {
     Object
         .keys(styles)
         .forEach(key => {
           this.$element.style[key] = styles[key]
         })
+  }
+
+  addClass(className) {
+    this.$element.classList.add(className)
+  }
+
+  removeClass(className) {
+    this.$element.classList.remove(className)
+  }
+
+  id(parse = false) {
+    if (parse) {
+      const parsed = this.id().split(':')
+      return {
+        row: +parsed[0],
+        col: +parsed[1]
+      }
+    }
+    return this.data.id
   }
 }
 

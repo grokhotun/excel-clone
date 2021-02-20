@@ -38,10 +38,26 @@ function toColumn(col, idx) {
 /*
   Функция создания ячеек
 */
-function toCell(_, idx) {
-  return `
-    <div class="cell" data-col="${idx}" contenteditable></div>
-  `
+// function toCell(row, col) {
+//   return `
+//     <div contenteditable class="cell" data-col="${col}" data-row="${row}"></div>
+//   `
+// }
+
+/*
+  Функция создания ячеек с помощью замыкания
+*/
+function toCell(row) {
+  return function(_, col) {
+    return `
+      <div
+        contenteditable
+        class="cell"
+        data-col="${col}"
+        data-id="${row}:${col}">
+      </div>
+    `
+  }
 }
 
 function toChar(_, idx) {
@@ -62,13 +78,13 @@ export function createTable(rowsCount = 15) {
 
   rows.push(createRow(null, cols))
 
-  for (let idx = 0; idx < rowsCount; idx++) {
+  for (let row = 0; row < rowsCount; row++) {
     const cells = new Array(colsCount)
         .fill('')
-        .map((_, idx) => toCell(_, idx))
+        .map(toCell(row))
         .join('')
 
-    rows.push(createRow(idx + 1, cells))
+    rows.push(createRow(row + 1, cells))
   }
 
   return rows.join('')

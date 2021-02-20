@@ -4,7 +4,12 @@ export class ExcelComponent extends VirtualDOM {
   constructor($root, options = {}) {
     super($root, options.listeners)
     this.name = options.name || 'Имя не определено'
+    this.prepare()
   }
+
+  prepare() {
+  }
+
   /**
    * @return {string} Возвращает строку с HTML разметкой компонента
    */
