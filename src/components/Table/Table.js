@@ -9,9 +9,11 @@ import {TableSelection} from '@/components/Table/TableSelection'
 export class Table extends ExcelComponent {
   static className = 'excel__table'
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
-      listeners: ['mousedown', 'keydown']
+      name: 'Table',
+      listeners: ['mousedown', 'keydown', 'input'],
+      ...options
     })
   }
 
@@ -26,7 +28,18 @@ export class Table extends ExcelComponent {
   init() {
     super.init()
     const $cell = this.$root.find('[data-id="0:0"]')
+    this.selectCell($cell)
+    this.$subscribe('formula:input', text => {
+      this.selection.current.text(text)
+    })
+    this.$subscribe('formula:done', () => {
+      this.selection.current.focus()
+    })
+  }
+
+  selectCell($cell) {
     this.selection.select($cell)
+    this.$dispatch('table:select', $cell)
   }
 
   onMousedown(event) {
@@ -70,7 +83,11 @@ export class Table extends ExcelComponent {
       event.preventDefault()
       const id = this.selection.current.id(true)
       const $next = this.$root.find(nextSelector(key, id))
-      this.selection.select($next)
+      this.selectCell($next)
     }
+  }
+
+  onInput(event) {
+    this.$dispatch('table:input', $(event.target))
   }
 }
