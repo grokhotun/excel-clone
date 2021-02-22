@@ -22,16 +22,16 @@ export class Formula extends ExcelComponent {
   init() {
     super.init()
     this.$formula = this.$root.find('#formula')
-    this.$subscribe('table:select', $cell => {
+    this.$on('table:select', $cell => {
       this.$formula.text($cell.text())
     })
-    this.$subscribe('table:input', $cell => {
+    this.$on('table:input', $cell => {
       this.$formula.text($cell.text())
     })
   }
 
   onInput(event) {
-    this.$dispatch('formula:input', $(event.target).text())
+    this.$emit('formula:input', $(event.target).text())
   }
 
   onKeydown(event) {
@@ -47,7 +47,7 @@ export class Formula extends ExcelComponent {
     */
     if (keys.includes(key) && !event.shiftKey) {
       event.preventDefault()
-      this.$dispatch('formula:done')
+      this.$emit('formula:done')
     }
   }
 }

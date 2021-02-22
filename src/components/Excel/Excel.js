@@ -5,6 +5,7 @@ export class Excel {
   constructor(selector, options) {
     this.$element = $(selector)
     this.components = options.components || []
+    this.store = options.store
     this.dispatcher = new Observer()
   }
 
@@ -12,7 +13,8 @@ export class Excel {
     const $root = $.create('div', 'excel')
 
     const componentOptions = {
-      dispatcher: this.dispatcher
+      dispatcher: this.dispatcher,
+      store: this.store
     }
 
     this.components = this.components.map(Component => {

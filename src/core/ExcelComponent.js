@@ -5,7 +5,9 @@ export class ExcelComponent extends VirtualDOM {
     super($root, options.listeners)
     this.name = options.name || 'Имя не определено'
     this.dispatcher = options.dispatcher
+    this.store = options.store
     this.unsubscribers = []
+    this.storeSub = null
     this.prepare()
   }
 
@@ -25,14 +27,26 @@ export class ExcelComponent extends VirtualDOM {
     Метод является интерфейсом на class Observer.
     Уведомляет слушателей про событие
   */
-  $dispatch(event, ...args) {
+  $emit(event, ...args) {
     this.dispatcher.dispatch(event, ...args)
+  }
+
+  $dispatch(action) {
+    this.store.dispatch(action)
+  }
+
+  $state() {
+    return this.store.getState()
+  }
+
+  $subscribe(func) {
+    this.storeSub = this.store.subscribe(func)
   }
 
   /*
     Метод осуществляет подписку на событие
   */
-  $subscribe(event, func) {
+  $on(event, func) {
     const unsubscriber = this.dispatcher.subscribe(event, func)
     this.unsubscribers.push(unsubscriber)
   }
@@ -50,5 +64,6 @@ export class ExcelComponent extends VirtualDOM {
   destroy() {
     this.removeDOMListeners()
     this.unsubscribers.forEach(unsubscriber => unsubscriber())
+    this.storeSub.unsubscribe()
   }
 }
