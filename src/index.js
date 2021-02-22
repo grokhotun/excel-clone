@@ -5,13 +5,11 @@ import {Table} from '@/components/Table/Table'
 import {Formula} from '@/components/Formula/Formula'
 import '@/scss/index.scss'
 
-const excel = new Excel('#root', {
-  components: [
-    Header,
-    Formula,
-    Toolbar,
-    Table
-  ]
-})
+
+const options = {
+  components: [Header, Formula, Toolbar, Table]
+}
+
+const excel = new Excel('#root', options)
 
 excel.render()

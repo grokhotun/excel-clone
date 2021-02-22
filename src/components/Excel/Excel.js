@@ -1,5 +1,5 @@
-import {Observer} from '@core/Observer'
-import {$} from '@core/DOM'
+import {Observer} from '@/core/Observer'
+import {$} from '@/core/DOM'
 
 export class Excel {
   constructor(selector, options) {

@@ -1,4 +1,4 @@
-import {VirtualDOM} from '@core/VirtualDOM'
+import {VirtualDOM} from '@/core/VirtualDOM'
 
 export class ExcelComponent extends VirtualDOM {
   constructor($root, options = {}) {

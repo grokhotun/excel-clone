@@ -1,4 +1,4 @@
-import {capitalize} from '@core/utils'
+import {capitalize} from '@/core/utils'
 export class VirtualDOM {
   constructor($root, listeners = []) {
     if (!$root) {

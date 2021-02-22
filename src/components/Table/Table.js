@@ -1,6 +1,6 @@
 import {$} from '@/core/DOM'
 import {range, nextSelector} from '@/core/utils'
-import {ExcelComponent} from '@core/ExcelComponent'
+import {ExcelComponent} from '@/core/ExcelComponent'
 import {createTable} from '@/components/Table/table.template'
 import {resizeHandler} from '@/components/Table/table.resize'
 import {shouldResize, isCell} from '@/components/Table/table.functions'
