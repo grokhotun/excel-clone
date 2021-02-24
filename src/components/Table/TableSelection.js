@@ -5,6 +5,10 @@ export class TableSelection {
     this.current = null
   }
 
+  get selectedIds() {
+    return this.group.map($el => $el.id())
+  }
+
   /*
     $element является сущностью
     класса DOM
@@ -25,5 +29,9 @@ export class TableSelection {
   clear() {
     this.group.map($element => $element.removeClass(TableSelection.className))
     this.group = []
+  }
+
+  applyStyle(style) {
+    this.group.forEach($element => $element.css(style))
   }
 }

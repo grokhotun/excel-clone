@@ -1,3 +1,6 @@
+import {defaultStyles} from '@/constants'
+import {stylesStringify} from '@/core/utils'
+
 /*
   Константы codechar букв от A до Z
 */
@@ -77,15 +80,20 @@ function toColumn({col, idx, width}) {
 */
 function toCell(state, row) {
   return function(_, col) {
+    const id = `${row}:${col}`
     const width = getWidth(state.colState, col)
     const content = state.dataState[`${row}:${col}`] || ''
+    const styles = stylesStringify({
+      ...defaultStyles,
+      ...state.stylesState[id]
+    })
     return `
       <div
         contenteditable
         class="cell"
         data-col="${col}"
-        data-id="${row}:${col}"
-        style="width: ${width}">
+        data-id="${id}"
+        style="${styles}; width: ${width}">
         ${content}
       </div>
     `
