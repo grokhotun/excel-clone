@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
@@ -41,8 +42,7 @@ module.exports = {
     extensions: ['.js'],
     // Создаем алиасы для импортов
     alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@core': path.resolve(__dirname, 'src/core'),
+      '@': path.resolve(__dirname, 'src')
     },
   },
   // Добавляем source-maps в режиме разработке
@@ -74,6 +74,9 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: filename('css'),
     }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
   ],
   module: {
     rules: [

@@ -85,3 +85,7 @@ export function debouncer(func, timeout = 200) {
     isDebouncing = setTimeout(later, timeout)
   }
 }
+
+export function clone(obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
