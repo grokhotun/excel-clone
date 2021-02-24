@@ -6,15 +6,17 @@ import {Formula} from '@/components/Formula/Formula'
 import {createStore} from '@/core/crateStore'
 import {rootReducer} from '@/redux/rootReducer'
 import {initialState} from '@/redux/initialState'
-import {storage} from '@/core/utils'
+import {debouncer, storage} from '@/core/utils'
 import '@/scss/index.scss'
 
 const store = createStore(rootReducer, initialState)
 
-store.subscribe(state => {
+const stateListener = debouncer(state => {
   console.log('App State: ', state)
   storage('excel-state', state)
-})
+}, 500)
+
+store.subscribe(stateListener)
 
 const options = {
   components: [Header, Formula, Toolbar, Table],

@@ -73,3 +73,15 @@ export function stylesStringify(styles = {}) {
       .map(key => `${camelToDashCase(key)}: ${styles[key]}`)
       .join(';')
 }
+
+export function debouncer(func, timeout = 200) {
+  let isDebouncing
+  return function(...args) {
+    const later = () => {
+      clearTimeout(isDebouncing)
+      func(...args)
+    }
+    clearTimeout(isDebouncing)
+    isDebouncing = setTimeout(later, timeout)
+  }
+}
