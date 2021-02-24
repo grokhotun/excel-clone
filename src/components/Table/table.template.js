@@ -1,6 +1,6 @@
 import {defaultStyles} from '@/constants'
+import {parse} from '@/core/parse'
 import {stylesStringify} from '@/core/utils'
-
 /*
   Константы codechar букв от A до Z
 */
@@ -82,7 +82,7 @@ function toCell(state, row) {
   return function(_, col) {
     const id = `${row}:${col}`
     const width = getWidth(state.colState, col)
-    const content = state.dataState[`${row}:${col}`] || ''
+    const content = state.dataState[id] || ''
     const styles = stylesStringify({
       ...defaultStyles,
       ...state.stylesState[id]
@@ -93,8 +93,9 @@ function toCell(state, row) {
         class="cell"
         data-col="${col}"
         data-id="${id}"
+        data-value="${content}"
         style="${styles}; width: ${width}">
-        ${content}
+        ${parse(content)}
       </div>
     `
   }
