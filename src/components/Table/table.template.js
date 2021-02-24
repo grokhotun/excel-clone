@@ -7,9 +7,14 @@ const CODES = {
 }
 
 const DEFAULT_WIDTH = 120
+const DEFAULT_HEIGHT = 24
 
 function getWidth(state = {}, idx) {
   return (state[idx] || DEFAULT_WIDTH) + 'px'
+}
+
+function getHeight(state = {}, idx) {
+  return (state[idx] || DEFAULT_HEIGHT) + 'px'
 }
 
 function withWidth(state) {
@@ -23,15 +28,20 @@ function withWidth(state) {
 /*
   Функция создания строчек
 */
-function createRow(idx, content) {
+function createRow(idx, content, rowState) {
   const resize = idx ? '<div class="row-resize" data-resize="row"></div>': ''
   const indexContent = idx ? idx : ''
+  const height = getHeight(rowState, idx)
   return `
-    <div class="row" data-type="resizable">
-      <div class="row-info">
-        ${indexContent}
-        ${resize}
-      </div>
+    <div
+      class="row"
+      data-type="resizable"
+      data-row="${idx}"
+      style="height: ${height} ">
+        <div class="row-info">
+          ${indexContent}
+          ${resize}
+        </div>
       <div class="row-data">${content}</div>
     </div>
   `
@@ -68,6 +78,7 @@ function toColumn({col, idx, width}) {
 function toCell(state, row) {
   return function(_, col) {
     const width = getWidth(state.colState, col)
+    const content = state.dataState[`${row}:${col}`] || ''
     return `
       <div
         contenteditable
@@ -75,6 +86,7 @@ function toCell(state, row) {
         data-col="${col}"
         data-id="${row}:${col}"
         style="width: ${width}">
+        ${content}
       </div>
     `
   }
@@ -101,7 +113,7 @@ export function createTable(rowsCount = 15, state = {}) {
       // })
       .join('')
 
-  rows.push(createRow(null, cols))
+  rows.push(createRow(null, cols, {} ))
 
   for (let row = 0; row < rowsCount; row++) {
     const cells = new Array(colsCount)
@@ -109,7 +121,7 @@ export function createTable(rowsCount = 15, state = {}) {
         .map(toCell(state, row))
         .join('')
 
-    rows.push(createRow(row + 1, cells))
+    rows.push(createRow(row + 1, cells, state.rowState))
   }
 
   return rows.join('')

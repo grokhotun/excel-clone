@@ -53,3 +53,13 @@ export function storage(key, data = null) {
   }
   localStorage.setItem(key, JSON.stringify(data))
 }
+
+export function isSame(a, b) {
+  if (typeof a === 'object' && typeof b === 'object') {
+    /*
+      Небольшой костыль для сравнения двух сложных объектов
+    */
+    return JSON.stringify(a) === JSON.stringify(b)
+  }
+  return a === b
+}

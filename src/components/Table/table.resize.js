@@ -38,12 +38,14 @@ export function resizeHandler(event, $root) {
         $root.findAll(`[data-col="${$parent.data.col}"]`).forEach(el => (el.style.width = `${value}px`))
       } else {
         $parent.css({height: `${value}px`})
-        $root.findAll(`[data-col="${$parent.data.row}"]`).forEach(el => (el.style.height = `${value}px`))
+        $root.findAll(`[data-row="${$parent.data.row}"]`).forEach(el => (el.style.height = `${value}px`))
       }
 
       resolve({
         value,
-        id: type === 'col' ? $parent.data.col : null
+        type,
+        // id: type === 'col' ? $parent.data.col : $parent.data.row
+        id: $parent.data[type]
       })
 
       $resizer.css({

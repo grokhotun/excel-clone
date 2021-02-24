@@ -1,5 +1,6 @@
 import {Observer} from '@/core/Observer'
 import {$} from '@/core/DOM'
+import {StoreSubscriber} from '@/core/StoreSubscriber'
 
 export class Excel {
   constructor(selector, options) {
@@ -7,6 +8,7 @@ export class Excel {
     this.components = options.components || []
     this.store = options.store
     this.dispatcher = new Observer()
+    this.subscriber = new StoreSubscriber(this.store)
   }
 
   getRoot() {
@@ -29,10 +31,12 @@ export class Excel {
 
   render() {
     this.$element.append(this.getRoot())
+    this.subscriber.subscribeComponents(this.components)
     this.components.forEach(component => component.init())
   }
 
-  desctroy() {
-    this.components.forEach(component => component.desctroy())
+  destroy() {
+    this.subscriber.unsubscribeComponents()
+    this.components.forEach(component => component.destroy())
   }
 }

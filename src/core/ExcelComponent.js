@@ -4,10 +4,12 @@ export class ExcelComponent extends VirtualDOM {
   constructor($root, options = {}) {
     super($root, options.listeners)
     this.name = options.name || 'Имя не определено'
+    // Массив ключей из store для подписки
+    this.subscribe = options.subscribe || []
     this.dispatcher = options.dispatcher
     this.store = options.store
     this.unsubscribers = []
-    this.storeSub = null
+    // this.storeSub = null
     this.prepare()
   }
 
@@ -35,13 +37,24 @@ export class ExcelComponent extends VirtualDOM {
     this.store.dispatch(action)
   }
 
+  /*
+    Сюда будут приходить изменения
+    только по тем данным, на которые
+    подписались компоненты
+  */
+  storeChanged() {}
+
+  isWatching(key) {
+    return this.subscribe.includes(key)
+  }
+
   $state() {
     return this.store.getState()
   }
 
-  $subscribe(func) {
-    this.storeSub = this.store.subscribe(func)
-  }
+  // $subscribe(func) {
+  //   this.storeSub = this.store.subscribe(func)
+  // }
 
   /*
     Метод осуществляет подписку на событие
@@ -64,6 +77,6 @@ export class ExcelComponent extends VirtualDOM {
   destroy() {
     this.removeDOMListeners()
     this.unsubscribers.forEach(unsubscriber => unsubscriber())
-    this.storeSub.unsubscribe()
+    // this.storeSub.unsubscribe()
   }
 }
