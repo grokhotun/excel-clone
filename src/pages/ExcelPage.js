@@ -7,31 +7,27 @@ import {Formula} from '@/components/Formula/Formula'
 import {createStore} from '@/core/store/createStore'
 import {rootReducer} from '@/redux/rootReducer'
 import {normalizeInitialState} from '@/redux/initialState'
-import {debouncer, storage} from '@/core/utils'
-
-function storageName(param) {
-  return `excel-state:${param}`
-}
+import {LocalStorageClient} from '@/core/LocalStorageClient';
+import {StateProcessor} from '@/core/StateProcessor';
 
 export class ExcelPage extends Page {
-  getRoot() {
-    const params = this.params ? this.params : Date.now().toString()
-    const state = storage(storageName(params))
-    const store = createStore(rootReducer, normalizeInitialState(state))
-    const stateListener = debouncer(state => {
-      console.log('App State: ', state)
-      storage(storageName(params), state)
-    }, 500)
+  constructor(param) {
+    super(param)
+    this.storeSub = null
+    this.processor = new StateProcessor(
+        new LocalStorageClient(this.params)
+    )
+  }
 
-    store.subscribe(stateListener)
-
+  async getRoot() {
+    const initialState = await this.processor.get()
+    const store = createStore(rootReducer, normalizeInitialState(initialState))
+    this.storeSub = store.subscribe(this.processor.watch)
     const options = {
       components: [Header, Formula, Toolbar, Table],
       store
     }
-
     this.excel = new Excel(options)
-
     return this.excel.getRoot()
   }
 
@@ -40,6 +36,7 @@ export class ExcelPage extends Page {
   }
 
   destroy() {
+    this.storeSub.unsubscribe()
     this.excel.destroy()
   }
 }

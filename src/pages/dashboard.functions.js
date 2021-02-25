@@ -30,7 +30,7 @@ function getAllKeys() {
 export function createRecordsTable() {
   const keys = getAllKeys()
   if (!keys.length) {
-    return `<p>У вас нет ни одной таблицы</p>`
+    return `<div class="db__empty">У вас нет ни одной таблицы</div>`
   }
   return `
     <div class="db__list-header">
